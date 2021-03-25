@@ -1,3 +1,5 @@
+from collections import deque
+
 class Grafo:
   def __init__(self, V, Adj, num_vertex):
     self.V = V
@@ -16,7 +18,7 @@ def enqueue(Q, v):
 
 def dequeue(Q):
     v = Q[0]
-    Q.pop(0)
+    Q.popleft()
     return v
 
 def bfs(G, s): #BFS alterado, onde fará a busca pelo grafo e retornará o vértice com o maior .d
@@ -26,7 +28,7 @@ def bfs(G, s): #BFS alterado, onde fará a busca pelo grafo e retornará o vért
 
     maxValue = s #variável que armazenará o vértice de maior .d
 
-    Q = []
+    Q = deque([])
     enqueue(Q, s)
 
     while (len(Q) != 0):
