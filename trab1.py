@@ -72,7 +72,8 @@ def verifica_arvore(G):
     else:
         return False
         
-    
+#função que executa o DFSVisit, semelhante à implementação vista em aula
+#retorna falso caso o grafo não seja uma árvore, e true caso consiga completar sua execução por todos os vértices do grafo
 def DFSVisit(G, u):
     global tempo
 
@@ -96,6 +97,11 @@ def DFSVisit(G, u):
 
 # função que calcula o diâmetro de uma árvore T, para isso calculamos o comprimento do maior caminho em T, retornando este valor ao final da execução
 def diameter(T):
+    #setamos o valor do vértice para branco
+    for i in range(T.num_vertex):
+        T.V[i].d = None
+        T.V[i].pai = None
+        T.V[i].cor = 'branco'
     s = T.V[0] # s = vértice qualquer de T
     a = bfsMax(T, s)
     #devemos resetar os valores dos vértices, pois até o momento o .d de todos os vértices possuem a distância em relação à s
@@ -108,6 +114,9 @@ def diameter(T):
 
     return b.d
 
+#função que executa o random_tree_random_walk para um número n de vértices
+#é realizada uma verificação se o grafo obtido é uma árvore
+#caso o grafo seja uma árvore, o mesmo é retornado. Caso contrário, a função retorna None
 def random_tree_random_walk(n):
     #inicializa o grafo com n vértices; inicializa uma lista de adjacência para cada execução
     G = Grafo([Vertice(i, None, None, 'branco') for i in range(n)], [[] for i in range(n)] , n) 
@@ -143,7 +152,7 @@ def random_tree_random_walk(n):
     else:
         return None
 
-
+#função principal onde será calculada a média e escrita posteriormente no arquivo txt
 def main():
     testes = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
 
