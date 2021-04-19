@@ -1,7 +1,7 @@
 #Renan Augusto Leonel ra: 115138
 #Pedro Henrique de Melo Costa ra: 112653
 from collections import deque
-from random import randint
+import random
 
 #classe para inicializarmos o grafo
 class Grafo:
@@ -176,16 +176,21 @@ def grafoCompleto(n):
         for y in range(x+1, n):
             G.Adj[x].append(G.V[y])
             G.Adj[y].append(G.V[x])      
-            G.aresta.append([x, y, randint(0,1)])
+            G.aresta.append([x, y, random.random()])
     return G
     
+##funções auxiliares para a execução do mst_kruskal
+#todas as funções foram implementadas seguindo o pseudo-código apresentado no livro Introduction to Algorithms - Thomas H. Cormen
+
 def make_set(v):
     v.pai = v
     v.rank = 0
 
+#une os conjuntos que contém u e v
 def uniao(u, v):
     link(find_set(u), find_set(v))
 
+#liga os vértices u e v com base no rank
 def link(u, v):
     if u.rank > v.rank:
         v.pai = u
@@ -200,16 +205,24 @@ def find_set(u):
     return u.pai
 
 #algoritmo baseado no pseudo-código visto em aula
+#ordena as arestas com base no peso
+#verifica se os vértices que compoem a aresta estão no mesmo componente
+#caso não estejam, adiciona a aresta na solução
+#ao final, retorna a lista de arestas que compõem o mst_kruskal
 def mst_kruskal(G):
     A = []
 
     for i in range(G.num_vertex):
         make_set(G.V[i])
+    #ordena as arestas com base no peso  
     G.aresta.sort(key=lambda x :x[2])
 
     for (u, v, peso) in G.aresta:
+        #verifica se u e v pertencem a um mesmo componente
         if find_set(G.V[u]) != find_set(G.V[v]):
+            #adiciona a aresta (u,v) na solução
             A.append([u, v, peso])
+            #liga os vértices u e v em suas respectivas listas de adjacência
             uniao(G.V[u],G.V[v])
     return A
 
@@ -236,6 +249,8 @@ def random_tree_kruskal(n):
 def main():
     testes = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
 
+    #### chamada para o random_tree_random_walk ####
+    
     #abertura de arquivo para escrita
     file = open("random_tree_random_walk.txt", "w")
 
@@ -246,6 +261,8 @@ def main():
     #     media = soma/500
     #     #escreve no arquivo
     #     file.write('{} {}\n'.format(n, media))
+
+    #### chamada para o random_tree_kruskal ####
 
     for n in testes:
         soma = 0
