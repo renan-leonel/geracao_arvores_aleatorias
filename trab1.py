@@ -18,14 +18,14 @@ class Vertice:
     self.pai = pai
     self.cor = cor
 
-class GrafoTeste:
+class GrafoKruskal:
   def __init__(self, V, Adj, num_vertex, aresta):
     self.V = V
     self.Adj = Adj
     self.num_vertex = num_vertex
     self.aresta = aresta
 
-class VerticeTeste:
+class VerticeKruskal:
   def __init__(self, indice, d, pai, cor, rank):
         self.indice = indice
         self.d = d
@@ -170,7 +170,7 @@ def random_tree_random_walk(n):
 #função utilizada para criar um grafo completo
 #será utilizada no random_tree_kruskal e no random_tree_prim
 def grafoCompleto(n):
-    G = GrafoTeste([Vertice(i, None, None, 'branco') for i in range(n)], [[] for i in range(n)] , n, []) 
+    G = GrafoKruskal([Vertice(i, None, None, 'branco') for i in range(n)], [[] for i in range(n)] , n, []) 
 
     for x in range(n):
         for y in range(x+1, n):
@@ -237,7 +237,7 @@ def random_tree_kruskal(n):
         lista[i[0]].append(i[1])
         lista[i[1]].append(i[0])
 
-    grafo2 = GrafoTeste([Vertice(i, None, None, 'branco') for i in range(n)], lista, n, x)
+    grafo2 = GrafoKruskal([Vertice(i, None, None, 'branco') for i in range(n)], lista, n, x)
 
     if verifica_arvore(grafo2) == True:
         return grafo2
