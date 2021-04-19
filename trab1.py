@@ -18,6 +18,21 @@ class Vertice:
     self.pai = pai
     self.cor = cor
 
+class GrafoTeste:
+  def __init__(self, V, Adj, num_vertex, aresta):
+    self.V = V
+    self.Adj = Adj
+    self.num_vertex = num_vertex
+    self.aresta = aresta
+
+class VerticeTeste:
+  def __init__(self, indice, d, pai, cor, rank):
+        self.indice = indice
+        self.d = d
+        self.pai = pai
+        self.cor = cor
+        self.rank = rank
+
 # função que enfileira um vértice v na fila criada em tempo O(1) 
 def enqueue(Q, v):
     Q.append(v)
@@ -152,6 +167,71 @@ def random_tree_random_walk(n):
     else:
         return None
 
+#função utilizada para criar um grafo completo
+#será utilizada no random_tree_kruskal e no random_tree_prim
+def grafoCompleto(n):
+    G = GrafoTeste([Vertice(i, None, None, 'branco') for i in range(n)], [[] for i in range(n)] , n, []) 
+
+    for x in range(n):
+        for y in range(x+1, n):
+            G.Adj[x].append(G.V[y])
+            G.Adj[y].append(G.V[x])      
+            G.aresta.append([x, y, randint(0,1)])
+    return G
+    
+def make_set(v):
+    v.pai = v
+    v.rank = 0
+
+def uniao(u, v):
+    link(find_set(u), find_set(v))
+
+def link(u, v):
+    if u.rank > v.rank:
+        v.pai = u
+    else:
+        u.pai = v
+        if u.rank == v.rank:
+            v.rank = v.rank + 1
+
+def find_set(u):
+    if u != u.pai:
+        u.pai = find_set(u.pai)
+    return u.pai
+
+#algoritmo baseado no pseudo-código visto em aula
+def mst_kruskal(G):
+    A = []
+
+    for i in range(G.num_vertex):
+        make_set(G.V[i])
+    G.aresta.sort(key=lambda x :x[2])
+
+    for (u, v, peso) in G.aresta:
+        if find_set(G.V[u]) != find_set(G.V[v]):
+            A.append([u, v, peso])
+            uniao(G.V[u],G.V[v])
+    return A
+
+def random_tree_kruskal(n):
+    G = grafoCompleto(n)
+
+    x = mst_kruskal(G)
+    
+    lista = [[]for i in range(n)] 
+
+    for i in x:
+        lista[i[0]].append(i[1])
+        lista[i[1]].append(i[0])
+
+    grafo2 = GrafoTeste([Vertice(i, None, None, 'branco') for i in range(n)], lista, n, x)
+
+    if verifica_arvore(grafo2) == True:
+        return grafo2
+    else:
+        return None
+
+
 #função principal onde será calculada a média e escrita posteriormente no arquivo txt
 def main():
     testes = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
@@ -159,13 +239,22 @@ def main():
     #abertura de arquivo para escrita
     file = open("random_tree_random_walk.txt", "w")
 
+    # for n in testes:
+    #     soma = 0
+    #     for x in range(500):
+    #         soma = soma + diameter(random_tree_random_walk(n))
+    #     media = soma/500
+    #     #escreve no arquivo
+    #     file.write('{} {}\n'.format(n, media))
+
     for n in testes:
         soma = 0
-        for x in range(500):
-            soma = soma + diameter(random_tree_random_walk(n))
-        media = soma/500
+        for x in range(10):
+            soma = soma + diameter(random_tree_kruskal(n))
+        media = soma/10
         #escreve no arquivo
         file.write('{} {}\n'.format(n, media))
+
 
 if __name__ == "__main__":
     main()
