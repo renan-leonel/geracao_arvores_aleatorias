@@ -1,6 +1,8 @@
 #Renan Augusto Leonel ra: 115138
 #Pedro Henrique de Melo Costa ra: 112653
 from collections import deque
+from random import randint
+from time import time
 import random
 
 #classe para inicializarmos o grafo
@@ -252,7 +254,7 @@ def main():
     #### chamada para o random_tree_random_walk ####
     
     #abertura de arquivo para escrita
-    file = open("random_tree_random_walk.txt", "w")
+    # file = open("random_tree_random_walk.txt", "w")
 
     # for n in testes:
     #     soma = 0
@@ -264,13 +266,21 @@ def main():
 
     #### chamada para o random_tree_kruskal ####
 
+    file = open("random_tree_kruskal.txt", "w")
+
+    tempo_inicial = time()
+
     for n in testes:
         soma = 0
-        for x in range(10):
+        for x in range(500):
             soma = soma + diameter(random_tree_kruskal(n))
-        media = soma/10
+        media = soma/500
         #escreve no arquivo
         file.write('{} {}\n'.format(n, media))
+
+    tempo_total = time() - tempo_inicial
+    print("Tempo de execução Kruskal: {:.2f}".format(tempo_total), "segundos")
+
 
 
 if __name__ == "__main__":
