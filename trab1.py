@@ -213,19 +213,25 @@ def find_set(u):
 #ao final, retorna a lista de arestas que compõem o mst_kruskal
 def mst_kruskal(G):
     A = []
-
+    
     for i in range(G.num_vertex):
         make_set(G.V[i])
     #ordena as arestas com base no peso  
     G.aresta.sort(key=lambda x :x[2])
 
-    for (u, v, peso) in G.aresta:
-        #verifica se u e v pertencem a um mesmo componente
+    x = 0 
+    y = 0
+
+    while x < G.num_vertex - 1:
+        (u, v, peso) = G.aresta[y]
+        y += 1
         if find_set(G.V[u]) != find_set(G.V[v]):
             #adiciona a aresta (u,v) na solução
             A.append([u, v, peso])
             #liga os vértices u e v em suas respectivas listas de adjacência
             uniao(G.V[u],G.V[v])
+
+            x += 1
     return A
 
 def random_tree_kruskal(n):
