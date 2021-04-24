@@ -27,14 +27,6 @@ class GrafoKruskal:
     self.num_vertex = num_vertex
     self.aresta = aresta
 
-class VerticeKruskal:
-  def __init__(self, indice, d, pai, cor, rank):
-        self.indice = indice
-        self.d = d
-        self.pai = pai
-        self.cor = cor
-        self.rank = rank
-
 # função que enfileira um vértice v na fila criada em tempo O(1) 
 def enqueue(Q, v):
     Q.append(v)
@@ -91,6 +83,7 @@ def verifica_arvore(G):
         
 #função que executa o DFSVisit, semelhante à implementação vista em aula
 #retorna falso caso o grafo não seja uma árvore, e true caso consiga completar sua execução por todos os vértices do grafo
+# tempo = 0
 def DFSVisit(G, u):
     global tempo
 
@@ -253,8 +246,169 @@ def random_tree_kruskal(n):
         return None
 
 
+def assert_diameter():    
+    #testes automatizados para a função diameter
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3], [2], [3, 1], [0, 4, 2], [3]], 5)) == 3
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4, 2], [4], [0, 3], [2], [0, 1]], 5)) == 4
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[2], [4], [0, 3, 4], [2], [2, 1]], 5)) == 3
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[1, 4], [0], [4, 3], [2], [0, 2]], 5)) == 4
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4, 3, 2], [4], [0], [0], [0, 1]], 5)) == 3
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3, 1], [0, 4], [3], [0, 2], [1]], 5)) == 4
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4], [2, 3], [4, 1], [1], [0, 2]], 5)) == 4
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[2, 1, 4], [0], [0, 3], [2], [0]], 5)) == 3
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3], [4], [3], [0, 2, 4], [3, 1]], 5)) == 3
+    assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[1, 3], [0, 2], [1], [0, 4], [3]], 5)) == 4
+
+#testes automatizados para a função bfsMax
+def assert_bfsMax():
+    G = Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3], [2], [3, 1], [0, 4, 2], [3]], 5)
+
+    bfsMax(G, G.V[0])
+
+    assert G.V[0].d == 0
+    assert G.V[1].d == 3
+    assert G.V[2].d == 2
+    assert G.V[3].d == 1
+    assert G.V[4].d == 2
+
+    g = Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4, 2], [4], [0, 3], [2], [0, 1]], 5)
+
+    bfsMax(g, g.V[0])
+
+    assert g.V[0].d == 0
+    assert g.V[1].d == 2
+    assert g.V[2].d == 1
+    assert g.V[3].d == 2
+    assert g.V[4].d == 1
+
+#testes automatizados para a função make_set
+def assert_make_set():
+    G = GrafoKruskal([Vertice(i, None, None, 'branco') for i in range(5)], [[] for i in range(5)] , 5, []) 
+
+    make_set(G.V[0])
+    make_set(G.V[1])
+    make_set(G.V[2])
+    make_set(G.V[3])
+    make_set(G.V[4])
+
+    assert G.V[0].pai == G.V[0]
+    assert G.V[0].rank == 0
+    assert G.V[1].pai == G.V[1]
+    assert G.V[1].rank == 0
+    assert G.V[2].pai == G.V[2]
+    assert G.V[2].rank == 0
+    assert G.V[3].pai == G.V[3]
+    assert G.V[3].rank == 0
+    assert G.V[4].pai == G.V[4]
+    assert G.V[4].rank == 0
+
+
+    assert find_set(G.V[0]) == G.V[0]
+    assert find_set(G.V[1]) == G.V[1]
+    assert find_set(G.V[2]) == G.V[2]
+    assert find_set(G.V[3]) == G.V[3]
+    assert find_set(G.V[4]) == G.V[4]
+
+#testes automatizados para a função find_set
+def assert_find_set():
+    G = GrafoKruskal([Vertice(i, None, None, 'branco') for i in range(5)], [[] for i in range(5)] , 5, []) 
+
+    make_set(G.V[0])
+    make_set(G.V[1])
+    make_set(G.V[2])
+    make_set(G.V[3])
+    make_set(G.V[4])
+
+    assert find_set(G.V[0]) != G.V[1]
+    assert find_set(G.V[1]) == G.V[1]
+    assert find_set(G.V[2]) != G.V[4]
+    assert find_set(G.V[3]) == G.V[3]
+    assert find_set(G.V[1]) != G.V[4]
+
+#testes automatizados para a função link
+def assert_link():
+    G = GrafoKruskal([Vertice(i, None, None, 'branco') for i in range(5)], [[] for i in range(5)] , 5, []) 
+
+    make_set(G.V[0])
+    make_set(G.V[1])
+    make_set(G.V[2])
+    make_set(G.V[3])
+    make_set(G.V[4])
+
+    link(G.V[0], G.V[3])
+    assert G.V[0].pai == G.V[3]
+    assert G.V[3].pai == G.V[3]
+    assert G.V[1].pai == G.V[1]
+    assert G.V[2].pai == G.V[2]
+
+
+    link(G.V[1], G.V[0])
+    assert G.V[1].pai == G.V[0]
+    assert G.V[2].pai == G.V[2]
+    assert G.V[4].pai == G.V[4]
+
+    G.V[4].rank = 1
+
+    link(G.V[3], G.V[4])
+    assert G.V[3].pai == G.V[4]
+
+#testes automatizados para a função uniao
+def assert_uniao():
+    G = GrafoKruskal([Vertice(i, None, None, 'branco') for i in range(5)], [[] for i in range(5)] , 5, []) 
+
+    make_set(G.V[0])
+    make_set(G.V[1])
+    make_set(G.V[2])
+    make_set(G.V[3])
+    make_set(G.V[4])
+
+    uniao(G.V[0], G.V[1])
+    assert find_set(G.V[0]) == find_set(G.V[1])
+    assert find_set(G.V[0]) != find_set(G.V[2])
+    assert find_set(G.V[0]) != find_set(G.V[3])
+    assert find_set(G.V[0]) != find_set(G.V[4])
+
+    uniao(G.V[3], G.V[4])
+    assert find_set(G.V[3]) == find_set(G.V[4])
+    assert find_set(G.V[0]) != find_set(G.V[2])
+    assert find_set(G.V[0]) != find_set(G.V[3])
+    assert find_set(G.V[0]) != find_set(G.V[4])
+
+#testes automatizados para a função mst_kruskal
+def assert_mst_kruskal():
+    G = GrafoKruskal  ([], [], 5, [])  
+    G.V = [Vertice(i, None, None, 'branco') for i in range(G.num_vertex)]
+    G.Adj = [
+    [G.V[1]],
+    [G.V[0], G.V[2]],
+    [G.V[1], G.V[3], G.V[4]],
+    [G.V[2], G.V[4]],
+    [G.V[2], G.V[3]]
+    ]
+
+    G.aresta = [
+    [0,1,2],
+    [1,2,3],
+    [2,3,5],
+    [2,4,15],
+    [3,4,20]
+    ]
+
+    assert mst_kruskal(G) == [[0, 1, 2], [1, 2, 3], [2, 3, 5], [2, 4, 15]]
+
+
 #função principal onde será calculada a média e escrita posteriormente no arquivo txt
 def main():
+
+    #chamada para todos os asserts implementados, ondese o algoritmo executa sem erros de compilação, todos os testes foram um sucesso
+    assert_diameter()
+    assert_bfsMax()
+    assert_find_set()
+    assert_link()
+    assert_make_set()
+    assert_mst_kruskal()
+    assert_uniao()
+
     testes = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
 
     #### chamada para o random_tree_random_walk ####
@@ -287,19 +441,5 @@ def main():
     tempo_total = time() - tempo_inicial
     print("Tempo de execução Kruskal: {:.2f}".format(tempo_total), "segundos")
 
-
-
 if __name__ == "__main__":
     main()
-    
-#testes automatizados para a função diameter, onde se o algoritmo executa sem erros de compilação, todos os testes foram um sucesso
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3], [2], [3, 1], [0, 4, 2], [3]], 5)) == 3
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4, 2], [4], [0, 3], [2], [0, 1]], 5)) == 4
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[2], [4], [0, 3, 4], [2], [2, 1]], 5)) == 3
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[1, 4], [0], [4, 3], [2], [0, 2]], 5)) == 4
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4, 3, 2], [4], [0], [0], [0, 1]], 5)) == 3
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3, 1], [0, 4], [3], [0, 2], [1]], 5)) == 4
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4], [2, 3], [4, 1], [1], [0, 2]], 5)) == 4
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[2, 1, 4], [0], [0, 3], [2], [0]], 5)) == 3
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3], [4], [3], [0, 2, 4], [3, 1]], 5)) == 3
-assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[1, 3], [0, 2], [1], [0, 4], [3]], 5)) == 4
