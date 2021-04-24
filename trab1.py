@@ -19,6 +19,7 @@ class Vertice:
     self.d = d
     self.pai = pai
     self.cor = cor
+    self.rank = 0
 
 class GrafoKruskal:
   def __init__(self, V, Adj, num_vertex, aresta):
