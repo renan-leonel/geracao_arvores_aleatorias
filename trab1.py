@@ -20,6 +20,7 @@ class Vertice:
     self.pai = pai
     self.cor = cor
     self.rank = 0
+    self.chave = 0
 
 class GrafoKruskal:
   def __init__(self, V, Adj, num_vertex, aresta):
@@ -245,6 +246,45 @@ def random_tree_kruskal(n):
         return grafo2
     else:
         return None
+
+def extract_min():
+    
+
+def mst_prim(G, peso, s):
+    for u in G.V:
+        u.chave = float('inf');
+        u.pai = None;
+    s.chave = 0;
+
+    Q = [];
+    Q = G.V;
+
+    while (len(Q) != 0):
+        u = extract_min(Q);
+
+        for v in G.Adj[u]:         
+            if v.chave > peso(u,v):
+                v.chave = peso(u,v)
+                v.pai = u
+
+                
+
+
+
+
+
+def random_tree_prim(n):
+    G = grafoCompleto(n);
+
+    x = mst_prim(G);
+
+    lista = [[]for i in range(n)] 
+
+    for i in x:
+        lista[i[0]].append(i[1])
+        lista[i[1]].append(i[0])
+
+
 
 
 def assert_diameter():    
