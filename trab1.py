@@ -175,6 +175,17 @@ def grafoCompleto(n):
             G.Adj[y].append(G.V[x])      
             G.aresta.append([x, y, random.random()])
     return G
+
+#cria um grafo completo utilizando matriz de adjacências
+#necessário para a execução do random_tree_prim
+def grafoCompletoPrim(n):
+    G = Grafo([Vertice(i, None, None, 'branco') for i in range(n)], [[float('inf') for j in range(n)] for i in range(n)] , n) 
+
+    for x in range(n):
+        for y in range(x+1, n):
+            G.Adj[x][y] = random.random()
+            G.Adj[y][x] = G.Adj[x][y]
+    return G
     
 ##funções auxiliares para a execução do mst_kruskal
 #todas as funções foram implementadas seguindo o pseudo-código apresentado no livro Introduction to Algorithms - Thomas H. Cormen
@@ -201,7 +212,9 @@ def find_set(u):
         u.pai = find_set(u.pai)
     return u.pai
 
-#algoritmo baseado no pseudo-código visto em aula
+#algoritmos para o método de kruskal
+#algoritmos baseados no pseudo-código visto em aula
+
 #ordena as arestas com base no peso
 #verifica se os vértices que compoem a aresta estão no mesmo componente
 #caso não estejam, adiciona a aresta na solução
@@ -229,6 +242,7 @@ def mst_kruskal(G):
             x += 1
     return A
 
+#gera um grafo com os vértices retornados de mst_kruskal(), sendo esse uma árvore geradora mínima
 def random_tree_kruskal(n):
     G = grafoCompleto(n)
 
@@ -247,48 +261,69 @@ def random_tree_kruskal(n):
     else:
         return None
 
-def extract_min():
-    
+#algoritmos para o método de prim
+#olha todas as arestas dos vértices já visitados e escolhe a de menor peso, desde que o vértice de destino seja um vértice que não tenha sido visitado
+#executa até que todos os vértices tenham sido visitados, gerando uma árvore geradora mínima
 
-def mst_prim(G, peso, s):
+#função que extrai o vértice de menor peso da fila
+def extract_min(Q):
+    min = Q[0]
+    for i in Q:
+        if min.chave > i.chave:
+            min = i
+    Q.remove(min)
+    return min
+
+#propósito para funções mst_prim() e random_tree_prim()
+#algoritmo para gerar uma árvore geradora mínima utilizando o método de Prim, adicionando um vértice por vez na solução
+#a escolha do vértice será pelo vértice de menor peso possível
+def mst_prim(G, s):
     for u in G.V:
-        u.chave = float('inf');
-        u.pai = None;
-    s.chave = 0;
+        u.chave = float('inf')
+        u.pai = None
+    s.chave = 0
 
-    Q = [];
-    Q = G.V;
+    Q = []
+
+    #coloca os vértices de G na fila
+    for i in G.V:
+        Q.append(i)
 
     while (len(Q) != 0):
-        u = extract_min(Q);
+        u = extract_min(Q)
 
-        for v in G.Adj[u]:         
-            if v.chave > peso(u,v):
-                v.chave = peso(u,v)
-                v.pai = u
+        for v in Q:         
+            if G.V[v.indice].chave > G.Adj[u.indice][v.indice]:
+                G.V[v.indice].chave = G.Adj[u.indice][v.indice]
+                G.V[v.indice].pai = u
 
-                
+    #cria a lista de adjacências
+    saida = [[] for i in range(len(G.V))]
+ 
+    #coloca na lista de adjacências
+    for u in G.V:
+        #não podemos pegar o primeiro vértice, pois não tem pai
+        if u.pai != None:
+            saida[u.pai.indice].append(u.indice)
+            saida[u.indice].append(u.pai.indice)
+    
+    return saida
 
-
-
-
-
+#gera um grafo com os vértices retornados de mst_prim(), sendo esse uma árvore geradora mínima
 def random_tree_prim(n):
-    G = grafoCompleto(n);
+    G = grafoCompletoPrim(n);
 
-    x = mst_prim(G);
+    lista = mst_prim(G, G.V[0]);
 
-    lista = [[]for i in range(n)] 
+    grafo2 = Grafo([Vertice(i, None, None, 'branco') for i in range(n)], lista, n)
 
-    for i in x:
-        lista[i[0]].append(i[1])
-        lista[i[1]].append(i[0])
+    if verifica_arvore(grafo2) == True:
+        return grafo2
+    else:
+        return None
 
-
-
-
+#testes automatizados para a função diameter
 def assert_diameter():    
-    #testes automatizados para a função diameter
     assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[3], [2], [3, 1], [0, 4, 2], [3]], 5)) == 3
     assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[4, 2], [4], [0, 3], [2], [0, 1]], 5)) == 4
     assert diameter(Grafo([Vertice(i, None, None, 'branco') for i in range(5)], [[2], [4], [0, 3, 4], [2], [2, 1]], 5)) == 3
@@ -437,6 +472,21 @@ def assert_mst_kruskal():
 
     assert mst_kruskal(G) == [[0, 1, 2], [1, 2, 3], [2, 3, 5], [2, 4, 15]]
 
+# def assert_extract_min():
+
+#testes automatizados para a função mst_prim
+def assert_mst_prim():
+    g = Grafo([Vertice(i, None, None, 'branco') for i in range(5)],
+    [[float('inf'), 2, float('inf'), float('inf'), float('inf')],
+     [2, float('inf'), 3, float('inf'), float('inf')],
+     [float('inf'), 3, float('inf'), 5, 15],
+     [float('inf'), float('inf'), 5, float('inf'), 20],
+     [float('inf'), float('inf'), 15, 20, float('inf')]], 5)
+    #matriz simétrica
+
+
+    print(mst_prim(g, g.V[0]))
+
 
 #função principal onde será calculada a média e escrita posteriormente no arquivo txt
 def main():
@@ -449,6 +499,7 @@ def main():
     assert_make_set()
     assert_mst_kruskal()
     assert_uniao()
+    assert_mst_prim()
 
     testes = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
 
@@ -467,20 +518,35 @@ def main():
 
     #### chamada para o random_tree_kruskal ####
 
-    file = open("random_tree_kruskal.txt", "w")
+    # file = open("random_tree_kruskal.txt", "w")
+
+    # tempo_inicial = time()
+
+    # for n in testes:
+    #     soma = 0
+    #     for x in range(500):
+    #         soma = soma + diameter(random_tree_kruskal(n))
+    #     media = soma/500
+    #     #escreve no arquivo
+    #     file.write('{} {}\n'.format(n, media))
+
+    # tempo_total = time() - tempo_inicial
+    # print("Tempo de execução Kruskal: {:.2f}".format(tempo_total), "segundos")
+
+    file = open("random_tree_prim.txt", "w")
 
     tempo_inicial = time()
 
     for n in testes:
         soma = 0
-        for x in range(500):
-            soma = soma + diameter(random_tree_kruskal(n))
-        media = soma/500
+        for x in range(5):
+            soma = soma + diameter(random_tree_prim(n))
+        media = soma/5
         #escreve no arquivo
         file.write('{} {}\n'.format(n, media))
 
     tempo_total = time() - tempo_inicial
-    print("Tempo de execução Kruskal: {:.2f}".format(tempo_total), "segundos")
+    print("Tempo de execução Prim: {:.2f}".format(tempo_total), "segundos")
 
 if __name__ == "__main__":
     main()
