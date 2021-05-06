@@ -472,7 +472,20 @@ def assert_mst_kruskal():
 
     assert mst_kruskal(G) == [[0, 1, 2], [1, 2, 3], [2, 3, 5], [2, 4, 15]]
 
-# def assert_extract_min():
+#testes automatizados para a função extract_min()
+def assert_extract_min():
+    test1 = [0, 1, 2 ,3, 4]
+    assert extract_min(test1) == 0
+
+    test2 = [5, 8, 2 ,9 ,15]
+    assert extract_min(test2) == 2
+
+    test3 = [23, 353, 58, 89, 24]
+    assert extract_min(test3) == 23
+
+    test4 = [32, 12, 43, 387643, 1]
+    assert extract_min(test4) == 1
+    
 
 #testes automatizados para a função mst_prim
 def assert_mst_prim():
@@ -483,9 +496,7 @@ def assert_mst_prim():
      [float('inf'), float('inf'), 5, float('inf'), 20],
      [float('inf'), float('inf'), 15, 20, float('inf')]], 5)
     #matriz simétrica
-
-
-    print(mst_prim(g, g.V[0]))
+    # print(mst_prim(g, g.V[0]))
 
 
 #função principal onde será calculada a média e escrita posteriormente no arquivo txt
@@ -539,9 +550,9 @@ def main():
 
     for n in testes:
         soma = 0
-        for x in range(5):
+        for x in range(500):
             soma = soma + diameter(random_tree_prim(n))
-        media = soma/5
+        media = soma/500
         #escreve no arquivo
         file.write('{} {}\n'.format(n, media))
 
