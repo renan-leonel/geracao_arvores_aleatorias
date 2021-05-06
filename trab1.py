@@ -517,32 +517,32 @@ def main():
     #### chamada para o random_tree_random_walk ####
     
     #abertura de arquivo para escrita
-    # file = open("random_tree_random_walk.txt", "w")
+    file = open("random_tree_random_walk.txt", "w")
 
-    # for n in testes:
-    #     soma = 0
-    #     for x in range(500):
-    #         soma = soma + diameter(random_tree_random_walk(n))
-    #     media = soma/500
-    #     #escreve no arquivo
-    #     file.write('{} {}\n'.format(n, media))
+    for n in testes:
+        soma = 0
+        for x in range(500):
+            soma = soma + diameter(random_tree_random_walk(n))
+        media = soma/500
+        #escreve no arquivo
+        file.write('{} {}\n'.format(n, media))
 
     #### chamada para o random_tree_kruskal ####
 
-    # file = open("random_tree_kruskal.txt", "w")
+    file = open("random_tree_kruskal.txt", "w")
 
-    # tempo_inicial = time()
+    tempo_inicial = time()
 
-    # for n in testes:
-    #     soma = 0
-    #     for x in range(500):
-    #         soma = soma + diameter(random_tree_kruskal(n))
-    #     media = soma/500
-    #     #escreve no arquivo
-    #     file.write('{} {}\n'.format(n, media))
+    for n in testes:
+        soma = 0
+        for x in range(500):
+            soma = soma + diameter(random_tree_kruskal(n))
+        media = soma/500
+        #escreve no arquivo
+        file.write('{} {}\n'.format(n, media))
 
-    # tempo_total = time() - tempo_inicial
-    # print("Tempo de execução Kruskal: {:.2f}".format(tempo_total), "segundos")
+    tempo_total = time() - tempo_inicial
+    print("Tempo de execução Kruskal: {:.2f}".format(tempo_total), "segundos")
 
     file = open("random_tree_prim.txt", "w")
 
