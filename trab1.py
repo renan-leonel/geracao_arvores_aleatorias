@@ -519,13 +519,26 @@ def main():
     #abertura de arquivo para escrita
     file = open("random_tree_random_walk.txt", "w")
 
+    tempo_inicial = time()
+
     for n in testes:
+        tempo_inicial_teste = time()
+
+        print("Teste {}".format(n))
         soma = 0
+
         for x in range(500):
-            soma = soma + diameter(random_tree_random_walk(n))
+            soma = soma + diameter(random_tree_random_walk(n))                 
         media = soma/500
+        
+        tempo_teste = time() - tempo_inicial_teste
+
+        print("N = {}".format(n),"terminou em {}".format(tempo_teste),"segundos")
         #escreve no arquivo
         file.write('{} {}\n'.format(n, media))
+
+    tempo_total = time() - tempo_inicial
+    print("Tempo de execução Random Walk: {:.2f}".format(tempo_total), "segundos")
 
     #### chamada para o random_tree_kruskal ####
 
@@ -534,10 +547,18 @@ def main():
     tempo_inicial = time()
 
     for n in testes:
+        tempo_inicial_teste = time()
+
+        print("Teste {}".format(n))
         soma = 0
+
         for x in range(500):
-            soma = soma + diameter(random_tree_kruskal(n))
+            soma = soma + diameter(random_tree_kruskal(n))                 
         media = soma/500
+        
+        tempo_teste = time() - tempo_inicial_teste
+
+        print("N = {}".format(n),"terminou em {}".format(tempo_teste),"segundos")
         #escreve no arquivo
         file.write('{} {}\n'.format(n, media))
 
@@ -549,10 +570,18 @@ def main():
     tempo_inicial = time()
 
     for n in testes:
+        tempo_inicial_teste = time()
+
+        print("Teste {}".format(n))
         soma = 0
+
         for x in range(500):
-            soma = soma + diameter(random_tree_prim(n))
+            soma = soma + diameter(random_tree_prim(n))                 
         media = soma/500
+        
+        tempo_teste = time() - tempo_inicial_teste
+
+        print("N = {}".format(n),"terminou em {}".format(tempo_teste),"segundos")
         #escreve no arquivo
         file.write('{} {}\n'.format(n, media))
 
